@@ -1,0 +1,15 @@
+{
+  "name": "flow-atlas",
+  "version": "0.1.0",
+  "description": "See a project as areas → user flows → issues → PRs. A GitHub issue/PR convention, checks, and a local dashboard for finishing projects built with AI agents.",
+  "type": "module",
+  "bin": { "flow-atlas": "bin/cli.mjs" },
+  "files": ["bin", "scripts", "dashboard", "templates", "docs", "README.md", "README.ko.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test scripts/check-pr.test.mjs scripts/decisions.test.mjs scripts/model.test.mjs",
+    "sample": "node bin/cli.mjs collect --sample"
+  },
+  "engines": { "node": ">=20" },
+  "keywords": ["github", "issues", "pull-requests", "dashboard", "information-architecture", "project-management", "ai-agents", "gh-cli"],
+  "license": "MIT"
+}

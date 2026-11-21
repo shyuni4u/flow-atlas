@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>flow-atlas</title>
+<style>
+:root{--bg:#F6F6F3;--card:#FFFFFF;--ink:#1B1B1A;--sub:#5A5A55;--line:#DEDED8;--track:#E4E4DE;--done:#1B55B0;--doing:#2A8A46;--doing-bg:#DDF2E2;--doing-ink:#17592B;--warn:#B45F06;--warn-bg:#FBE3C4;--warn-ink:#7A3A00;--out:#EEEEEA;--tip:#1B1B1A;--tip-ink:#FFFFFF;--pr:#EEF3FB;--pr-ink:#123C7E;--pr-line:#B7CBEA}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--card:#212120;--ink:#EDEDE8;--sub:#A9A9A2;--line:#3A3A37;--track:#3A3A37;--done:#7FB0F5;--doing:#5CCB7C;--doing-bg:#173A22;--doing-ink:#B5EBC4;--warn:#F0A44B;--warn-bg:#4A3113;--warn-ink:#FFD9A8;--out:#1C1C1B;--tip:#EDEDE8;--tip-ink:#161615;--pr:#1D2A3F;--pr-ink:#BBD4FA;--pr-line:#35507C}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:14px;line-height:1.5}
+main{max-width:1360px;margin:0 auto;padding:28px 16px 56px;display:flex;flex-direction:column;gap:20px}
+a{color:inherit;text-decoration-color:var(--sub);text-underline-offset:2px}
+h1{margin:0;font-size:24px}h2{margin:0;font-size:13px;color:var(--sub);font-weight:700}
+.sub{color:var(--sub);font-size:12px}
+.desc{margin:4px 0 0;color:var(--sub);font-size:14px;max-width:70ch}
+.head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+.overall{flex:1 1 280px;max-width:420px}
+.bar{height:6px;border-radius:3px;background:var(--track);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--done);border-radius:3px}
+.bar.doing>i{background:var(--doing)}
+.bar.big{height:10px;border-radius:5px}
+.row{display:flex;align-items:center;gap:8px}
+.row .bar{flex:1}
+.pct{font-size:12px;color:var(--sub);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
+.top{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
+.card.next{border:2px solid var(--done)}
+.card p{margin:6px 0 0}
+.big-text{font-size:17px;font-weight:700}
+.count{font-size:22px;font-weight:700;margin-right:6px}
+details>summary{cursor:pointer;list-style:none;min-height:32px}
+details>summary::-webkit-details-marker{display:none}
+details>summary:focus-visible{outline:2px solid var(--done);outline-offset:2px;border-radius:4px}
+ul{margin:8px 0 0;padding-left:18px}li{margin:2px 0}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;align-items:start}
+.area{display:flex;flex-direction:column;gap:8px}
+.areahead{position:relative;background:var(--ink);color:var(--bg);border-radius:8px;padding:10px 12px}
+.areahead b{font-size:15px}
+.areahead .pct{color:inherit;opacity:.8}
+.areahead .bar{background:color-mix(in srgb,var(--bg) 25%,transparent)}
+.areahead .bar>i{background:var(--bg)}
+.flow{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px}
+.flow.out{background:var(--out);border-style:dashed;color:var(--sub)}
+.flow>summary{padding:10px 12px}
+.flowname{display:flex;justify-content:space-between;gap:8px;font-weight:700;margin-bottom:6px}
+.tag{font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;white-space:nowrap;border:1px solid transparent}
+.tag.done{background:var(--done);color:var(--card)}
+.tag.doing{background:var(--doing-bg);color:var(--doing-ink)}
+.tag.todo{border-color:var(--sub);color:var(--sub)}
+.tag.out{background:var(--track);color:var(--sub)}
+.tag.ask{background:var(--warn-bg);color:var(--warn-ink)}
+.tip{display:none;position:absolute;z-index:5;left:12px;top:100%;margin-top:4px;background:var(--tip);color:var(--tip-ink);font-size:12px;font-weight:400;padding:6px 10px;border-radius:6px;white-space:nowrap;pointer-events:none}
+.flow:not([open])>summary:hover .tip,.areahead:hover .tip{display:block}
+.issues{border-top:1px solid var(--line);padding:4px 12px 10px}
+.issue{border-bottom:1px solid var(--line)}
+.issue:last-child{border-bottom:0}
+.issue>summary{padding:8px 0}
+.issuetitle{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:4px}
+.more{background:var(--bg);border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px}
+.more ul{margin:4px 0 0}
+.pr{display:inline-block;font-size:11px;border-radius:4px;padding:1px 6px;background:var(--pr);color:var(--pr-ink);border:1px solid var(--pr-line);margin:2px 4px 2px 0;text-decoration:none}
+.pr.warn{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--warn)}
+.empty{color:var(--sub);font-size:12px;padding:8px 0}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.chip{font:inherit;font-size:12px;color:var(--sub);background:transparent;border:1px solid var(--line);border-radius:999px;padding:0 12px;min-height:32px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+.chip:focus-visible,.controls select:focus-visible{outline:2px solid var(--done);outline-offset:2px}
+.controls select{font:inherit;font-size:12px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:0 10px;min-height:32px;margin-left:auto}
+.title{display:flex;align-items:center;gap:6px}
+.syncwrap{position:relative;display:inline-flex}
+.syncbtn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-6px 0;padding:0;border:0;border-radius:50%;background:transparent;color:var(--sub);cursor:pointer}
+.syncbtn:hover{background:var(--track);color:var(--ink)}
+.syncbtn:focus-visible{outline:2px solid var(--done);outline-offset:-2px}
+.syncbtn.err{color:var(--warn)}
+.syncbtn svg{width:20px;height:20px}
+.syncbtn.busy svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.syncbtn.busy svg{animation:none;opacity:.4}}
+.syncwrap .tip{left:0;white-space:normal;width:max-content;max-width:280px;line-height:1.6}
+.syncwrap:hover .tip,.syncwrap:focus-within .tip{display:block}
+.banner{background:var(--warn-bg);color:var(--warn-ink);border-radius:8px;padding:8px 12px;font-size:13px}
+</style>
+</head>
+<body>
+<main><div id="app" style="display:flex;flex-direction:column;gap:20px"><p class="sub">…</p></div></main>
+<!-- collect.mjs 가 아래 null 을 데이터로 바꿔 넣는다. 그러면 서버 없이 이 파일만 열어도 보인다. -->
+<script id="embedded" type="application/json">null</script>
+<script>
+// 이슈 제목과 댓글은 외부 입력이다. innerHTML 을 쓰지 않고 textContent 로만 넣는다.
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) { if (v === false || v == null) continue; if (k === 'class') n.className = v; else if (k === 'style') n.style.cssText = v; else n.setAttribute(k, v === true ? '' : v); }
+  for (const kid of kids.flat()) if (kid != null && kid !== false) n.append(kid);
+  return n;
+};
+// replaceChildren 은 null 을 글자로 찍으므로 빈 값을 걸러서 넣는다.
+const put = (node, ...kids) => node.replaceChildren(...kids.flat().filter((k) => k != null && k !== false));
+const link = (text, url, cls) => /^https:\/\/github\.com\//.test(url || '') ? el('a', { href: url, target: '_blank', rel: 'noopener', class: cls }, text) : el('span', { class: cls }, text);
+const pct = (x) => Math.round(x * 100);
+const bar = (x, cls = '') => el('div', { class: `bar ${cls}`, role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': pct(x) }, el('i', { style: `width:${pct(x)}%` }));
+// 화면 문구. 데이터의 lang(ko | en)을 따르고, 데이터가 없으면 브라우저 언어를 따른다.
+const STR = {
+  ko: {
+    locale: 'ko-KR', status: { done: '완료', doing: '진행 중', todo: '시작 전', out: '제외' },
+    prState: { merged: '병합됨', open: '열림', draft: '초안', closed: '닫힘' },
+    review: { APPROVED: '승인됨', CHANGES_REQUESTED: '수정 요청', REVIEW_REQUIRED: '리뷰 대기' },
+    checks: { pass: '검사 통과', fail: '검사 실패', pending: '검사 진행 중' },
+    none: '없음', verified: '검증 있음', unverified: '검증 없음', closed: '닫힘', open: '열림',
+    ask: (n) => `질문 ${n}`, openIssue: 'GitHub에서 이슈 열기', waiting: '답을 기다리는 질문', blocking: '막힘',
+    recommended: (x) => `권장: ${x}`, decided: '결정된 것', reason: (x) => `사유: ${x}`,
+    flowTip: (i, c, p, a) => `이슈 ${i}건 (닫힘 ${c}) · PR ${p}건 · 대기 질문 ${a}건`, noIssues: '아직 이슈가 없다',
+    areaTip: (n, d, g, t, o) => `흐름 ${n}개: 완료 ${d} · 진행 중 ${g} · 시작 전 ${t}${o ? ` · 제외 ${o}` : ''}`,
+    sorts: [['default', '완료는 아래로'], ['plan', '정본 순서'], ['high', '진행률 높은 순'], ['low', '진행률 낮은 순']],
+    sort: '정렬', controls: '흐름 필터와 정렬', all: '전체', title: (p) => `${p} 지도`,
+    sample: '예시 데이터로 만든 화면이다. 실제 저장소의 이슈와 PR이 아니다.', asOf: (v, t) => `${v} · ${t} 기준`,
+    overall: (d, g, t) => `흐름 완료 ${d} · 진행 중 ${g} · 시작 전 ${t}`, next: '지금 할 한 가지',
+    nextKind: { answer: '질문에 답하기', 'fix-checks': '실패한 검사 고치기', 'address-review': '리뷰 의견 반영하기', closest: '끝에 가장 가까운 작업', start: '시작할 작업', 'create-issue': '이슈 만들기' },
+    nextEmptyFlow: (f) => `"${f}" 흐름에 아직 이슈가 없다`, nextNone: '열린 작업이 없다',
+    askSub: (b) => `건 · 막힘 ${b}건`, gaps: '연결이 끊긴 곳', gapSub: (a, b) => `건 · PR 없는 이슈 ${a} · 이슈 없는 PR ${b}`,
+    gapIssuesNoPr: 'PR 없는 열린 이슈', gapPrsNoIssue: '이슈 없는 PR', gapPrsNoEvidence: '검증이 비어 있는 PR', gapIssuesNoFlow: '흐름이 없는 이슈',
+    cut: '이번 버전에서 뺀 것', cutSub: '개 흐름', noMatch: '해당하는 흐름이 없다.',
+    help: '흐름을 누르면 이슈가, 이슈를 누르면 PR과 질문이 펼쳐진다. 진행률은 이슈 본문의 체크박스에서 계산한다: 이슈 → 흐름 평균 → 영역 평균 → 전체 평균.',
+    syncing: '동기화 중', reload: 'GitHub에서 다시 불러오기', quota: (r, l, t) => `API 남은 양 ${r} / ${l} · ${t} 초기화`,
+    autoOn: '5분마다 자동으로 새로고침', autoOff: '남은 양이 20% 아래라 자동 새로고침을 멈췄다',
+    firstSync: '아직 동기화한 적이 없다. 처음 한 번 불러오는 중…', noData: '데이터가 없다. flow-atlas collect 를 실행한 뒤 dashboard-out/index.html 을 연다.',
+  },
+  en: {
+    locale: 'en-US', status: { done: 'Done', doing: 'In progress', todo: 'Not started', out: 'Cut' },
+    prState: { merged: 'merged', open: 'open', draft: 'draft', closed: 'closed' },
+    review: { APPROVED: 'approved', CHANGES_REQUESTED: 'changes requested', REVIEW_REQUIRED: 'awaiting review' },
+    checks: { pass: 'checks passing', fail: 'checks failing', pending: 'checks running' },
+    none: 'None', verified: 'verification filled in', unverified: 'no verification', closed: 'Closed', open: 'Open',
+    ask: (n) => `${n} question${n === 1 ? '' : 's'}`, openIssue: 'Open issue on GitHub', waiting: 'Waiting for your answer', blocking: 'blocking',
+    recommended: (x) => `recommended: ${x}`, decided: 'Decided', reason: (x) => `reason: ${x}`,
+    flowTip: (i, c, p, a) => `${i} issue${i === 1 ? '' : 's'} (${c} closed) · ${p} PR${p === 1 ? '' : 's'} · ${a} open question${a === 1 ? '' : 's'}`, noIssues: 'No issues yet',
+    areaTip: (n, d, g, t, o) => `${n} flow${n === 1 ? '' : 's'}: ${d} done · ${g} in progress · ${t} not started${o ? ` · ${o} cut` : ''}`,
+    sorts: [['default', 'Finished last'], ['plan', 'Plan order'], ['high', 'Most progress first'], ['low', 'Least progress first']],
+    sort: 'Sort', controls: 'Filter and sort flows', all: 'All', title: (p) => `${p} map`,
+    sample: 'This page shows sample data, not issues and pull requests from a real repository.', asOf: (v, t) => `${v} · as of ${t}`,
+    overall: (d, g, t) => `Flows: ${d} done · ${g} in progress · ${t} not started`, next: 'Do this next',
+    nextKind: { answer: 'Answer a question', 'fix-checks': 'Fix failing checks', 'address-review': 'Address review comments', closest: 'Closest to done', start: 'Start this', 'create-issue': 'Create an issue' },
+    nextEmptyFlow: (f) => `The "${f}" flow has no issues yet`, nextNone: 'No open work',
+    askSub: (b) => ` · ${b} blocking`, gaps: 'Broken links', gapSub: (a, b) => ` · ${a} issues without a PR · ${b} PRs without an issue`,
+    gapIssuesNoPr: 'Open issues without a PR', gapPrsNoIssue: 'PRs without an issue', gapPrsNoEvidence: 'PRs with empty verification', gapIssuesNoFlow: 'Issues without a flow',
+    cut: 'Cut from this version', cutSub: ' flows', noMatch: 'No flows match.',
+    help: 'Click a flow to see its issues, and an issue to see its PRs and questions. Progress comes from the task checkboxes in each issue: issue → flow average → area average → total.',
+    syncing: 'Syncing', reload: 'Reload from GitHub', quota: (r, l, t) => `API quota ${r} / ${l} · resets at ${t}`,
+    autoOn: 'Refreshes automatically every 5 minutes', autoOff: 'Quota is below 20%, so automatic refresh is paused',
+    firstSync: 'Not synced yet. Loading for the first time…', noData: 'No data. Run flow-atlas collect, then open dashboard-out/index.html.',
+  },
+};
+let T = STR[(navigator.language || '').startsWith('ko') ? 'ko' : 'en'];
+const setLang = (d) => { if (d && STR[d.lang]) T = STR[d.lang]; document.documentElement.lang = T === STR.ko ? 'ko' : 'en'; };
+const list = (items, render) => items.length ? el('ul', {}, items.map((i) => el('li', {}, render(i)))) : el('p', { class: 'empty' }, T.none);
+
+function prLine(pr) {
+  const parts = [pr.relation === 'closes' ? 'Closes' : 'Refs', T.prState[pr.state], T.review[pr.review], T.checks[pr.checks], pr.hasEvidence ? T.verified : T.unverified].filter(Boolean);
+  return [link(`PR #${pr.number} ${pr.title}`, pr.url), ` · ${parts.join(' · ')}`];
+}
+
+function issueNode(issue) {
+  const waiting = issue.decisions.filter((d) => d.status === 'waiting');
+  const decided = issue.decisions.filter((d) => d.status === 'decided');
+  const right = issue.state === 'closed' ? T.closed : issue.tasks.total ? `${issue.tasks.done}/${issue.tasks.total}` : T.open;
+  return el('details', { class: 'issue', 'data-key': `issue-${issue.number}` },
+    el('summary', {},
+      el('div', { class: 'issuetitle' }, el('span', {}, `#${issue.number} ${issue.title}`), el('span', { class: 'sub' }, right)),
+      el('div', { class: 'row' }, bar(issue.progress, issue.state === 'closed' ? '' : 'doing'), waiting.length ? el('span', { class: 'tag ask' }, T.ask(waiting.length)) : null),
+      el('div', {}, issue.prs.map((pr) => el('span', { class: `pr ${pr.checks === 'fail' || pr.review === 'CHANGES_REQUESTED' ? 'warn' : ''}` }, `PR #${pr.number} ${T.prState[pr.state]}`)))),
+    el('div', { class: 'more' },
+      el('div', {}, link(T.openIssue, issue.url)),
+      el('b', {}, 'PR'), list(issue.prs, prLine),
+      waiting.length ? [el('b', {}, T.waiting), list(waiting, (d) => [link(d.question, d.url), d.blocking ? ` · ${T.blocking}` : '', d.recommended ? ` · ${T.recommended(d.recommended)}` : ''])] : null,
+      decided.length ? [el('b', {}, T.decided), list(decided, (d) => [link(d.question, d.url), ` → ${d.decision}`])] : null));
+}
+
+function flowNode(flow, areaId) {
+  const closed = flow.issues.filter((i) => i.state === 'closed').length;
+  const prs = flow.issues.reduce((n, i) => n + i.prs.length, 0);
+  const asks = flow.issues.reduce((n, i) => n + i.decisions.filter((d) => d.status === 'waiting').length, 0);
+  return el('details', { class: `flow ${flow.status}`, 'data-key': `flow-${areaId}/${flow.id}` },
+    el('summary', {},
+      el('div', { class: 'flowname' }, el('span', {}, flow.name), el('span', { class: `tag ${flow.status}` }, T.status[flow.status])),
+      flow.status === 'out' ? null : el('div', { class: 'row' }, bar(flow.progress, flow.status === 'done' ? '' : 'doing'), el('span', { class: 'pct' }, `${pct(flow.progress)}%`)),
+      el('span', { class: 'tip' }, T.flowTip(flow.issues.length, closed, prs, asks))),
+    el('div', { class: 'issues' }, flow.issues.length ? [...flow.issues].sort((a, b) => (a.state === 'closed') - (b.state === 'closed')).map(issueNode) : el('p', { class: 'empty' }, T.noIssues)));
+}
+
+function areaNode(area) {
+  const inScope = area.flows.filter((f) => f.scope === 'in');
+  const n = (s) => area.flows.filter((f) => f.status === s).length;
+  return el('section', { class: 'area' },
+    el('div', { class: 'areahead' },
+      el('div', { class: 'row' }, el('b', { style: 'flex:1' }, area.name), el('span', { class: 'pct' }, `${pct(area.progress)}%`)),
+      bar(area.progress),
+      el('span', { class: 'tip' }, T.areaTip(inScope.length, n('done'), n('doing'), n('todo'), n('out')))),
+    area.shown.map((f) => flowNode(f, area.id)));
+}
+
+// 보기 설정: 상태 필터와 정렬. 브라우저에 기억해 두되, 저장이 막혀 있어도 동작한다.
+const view = { filter: 'all', sort: 'default' };
+try { Object.assign(view, JSON.parse(localStorage.getItem('dashboard-view') || '{}')); } catch {}
+const RANK = { doing: 0, todo: 1, done: 2, out: 3 };
+
+/** 필터와 정렬을 적용한다. 기본 정렬은 진행 중 → 시작 전 → 완료 → 제외 순이고, 다 끝난 영역은 뒤로 보낸다. */
+function arrange(areas) {
+  const byProgress = (dir) => (x, y) => (x.status === 'out') - (y.status === 'out') || dir * (x.progress - y.progress);
+  const list = areas.map((a) => {
+    const shown = a.flows.filter((f) => view.filter === 'all' || f.status === view.filter);
+    if (view.sort === 'default') shown.sort((x, y) => RANK[x.status] - RANK[y.status]);
+    if (view.sort === 'high') shown.sort(byProgress(-1));
+    if (view.sort === 'low') shown.sort(byProgress(1));
+    return { ...a, shown };
+  }).filter((a) => a.shown.length);
+  if (view.sort === 'default') list.sort((x, y) => (x.progress >= 1) - (y.progress >= 1));
+  if (view.sort === 'high') list.sort((x, y) => y.progress - x.progress);
+  if (view.sort === 'low') list.sort((x, y) => x.progress - y.progress);
+  return list;
+}
+
+function controls(d) {
+  const change = (key, value) => { view[key] = value; try { localStorage.setItem('dashboard-view', JSON.stringify(view)); } catch {} render(d); };
+  const total = d.counts.done + d.counts.doing + d.counts.todo + d.counts.out;
+  const chip = (key, label, n) => {
+    const b = el('button', { type: 'button', class: 'chip', 'aria-pressed': String(view.filter === key) }, `${label} ${n}`);
+    b.addEventListener('click', () => change('filter', key));
+    return b;
+  };
+  const select = el('select', { 'aria-label': T.sort }, T.sorts.map(([v, t]) => el('option', { value: v }, t)));
+  select.value = T.sorts.some(([v]) => v === view.sort) ? view.sort : 'default';
+  select.addEventListener('change', () => change('sort', select.value));
+  return el('div', { class: 'controls', role: 'group', 'aria-label': T.controls },
+    chip('all', T.all, total), chip('doing', T.status.doing, d.counts.doing), chip('todo', T.status.todo, d.counts.todo), chip('done', T.status.done, d.counts.done), chip('out', T.status.out, d.counts.out), select);
+}
+
+function render(d) {
+  setLang(d);
+  const g = d.gaps;
+  const nx = d.next;
+  const nextText = nx.kind === 'create-issue' ? T.nextEmptyFlow(nx.flow) : nx.kind === 'none' ? T.nextNone : nx.text;
+  const gapCount = g.issuesWithoutPr.length + g.prsWithoutIssue.length + g.prsWithoutEvidence.length + g.issuesWithoutFlow.length;
+  const ref = (i) => link(`#${i.number} ${i.title}`, i.url);
+  const prRef = (p) => [link(`PR #${p.number} ${p.title}`, p.url), p.reason ? ` · ${T.reason(p.reason)}` : ''];
+  const out = d.areas.flatMap((a) => a.flows.filter((f) => f.scope === 'out').map((f) => `${a.name} › ${f.name}`));
+  document.title = T.title(d.product);
+  const areas = arrange(d.areas);
+  const app = document.getElementById('app');
+  // 새로 그려도 펼쳐 둔 항목은 그대로 둔다.
+  const open = new Set([...app.querySelectorAll('details[open]')].map((n) => n.dataset.key));
+  put(app,
+    d.sample ? el('div', { class: 'banner' }, T.sample) : null,
+    el('div', { class: 'head' },
+      el('div', { style: 'flex:1 1 320px;min-width:0' },
+        el('div', { class: 'sub' }, d.repo && d.repo.name ? [link(d.repo.name, d.repo.url), ' · '] : null, T.asOf(d.version, new Date(d.generatedAt).toLocaleString(T.locale))),
+        el('div', { class: 'title' }, el('h1', {}, d.product), syncButton()),
+        d.repo && d.repo.description ? el('p', { class: 'desc' }, d.repo.description) : null),
+      el('div', { class: 'overall' },
+        el('div', { class: 'row' }, el('span', { class: 'sub', style: 'flex:1' }, T.overall(d.counts.done, d.counts.doing, d.counts.todo)), el('b', {}, `${pct(d.progress)}%`)),
+        bar(d.progress, 'big'))),
+    el('div', { class: 'top' },
+      el('div', { class: 'card next' }, el('h2', {}, `${T.next}${T.nextKind[nx.kind] ? ` · ${T.nextKind[nx.kind]}` : ''}`),
+        el('p', { class: 'big-text' }, link(nextText, nx.url)), nx.where ? el('p', { class: 'sub' }, nx.where) : null),
+      el('details', { class: 'card', 'data-key': 'top-ask' }, el('summary', {}, el('h2', {}, T.waiting), el('p', {}, el('span', { class: 'count' }, String(d.openDecisions.length)), el('span', { class: 'sub' }, T.askSub(d.openDecisions.filter((q) => q.blocking).length)))),
+        list(d.openDecisions, (q) => [link(q.question, q.url), ` · ${q.where}`, q.blocking ? ` · ${T.blocking}` : ''])),
+      el('details', { class: 'card', 'data-key': 'top-gap' }, el('summary', {}, el('h2', {}, T.gaps), el('p', {}, el('span', { class: 'count' }, String(gapCount)), el('span', { class: 'sub' }, T.gapSub(g.issuesWithoutPr.length, g.prsWithoutIssue.length)))),
+        el('b', {}, T.gapIssuesNoPr), list(g.issuesWithoutPr, ref),
+        el('b', {}, T.gapPrsNoIssue), list(g.prsWithoutIssue, prRef),
+        el('b', {}, T.gapPrsNoEvidence), list(g.prsWithoutEvidence, prRef),
+        el('b', {}, T.gapIssuesNoFlow), list(g.issuesWithoutFlow, ref)),
+      el('details', { class: 'card', 'data-key': 'top-out' }, el('summary', {}, el('h2', {}, T.cut), el('p', {}, el('span', { class: 'count' }, String(out.length)), el('span', { class: 'sub' }, T.cutSub))),
+        list(out, (name) => name))),
+    controls(d),
+    areas.length ? el('div', { class: 'map' }, areas.map(areaNode)) : el('p', { class: 'empty' }, T.noMatch),
+    el('p', { class: 'sub' }, T.help));
+  for (const n of app.querySelectorAll('details')) if (open.has(n.dataset.key)) n.open = true;
+}
+
+// 동기화. 로컬 서버(serve.mjs)로 열었을 때만 버튼이 나온다. 정적 파일로 열면 data.json 만 읽는다.
+const AUTO_MS = 5 * 60 * 1000;   // 자동 새로고침 간격
+const AUTO_MIN_SHARE = 0.2;      // API 남은 양이 이 비율 아래면 자동 새로고침을 멈춘다
+const state = { local: false, data: null, rate: null, busy: false, error: '', timer: null };
+const autoAllowed = () => !state.rate || state.rate.remaining / state.rate.limit >= AUTO_MIN_SHARE;
+const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.5 6.2"/><path d="M3 12a9 9 0 0 1 15.5-6.2"/><path d="M18.5 2v4h-4"/><path d="M5.5 22v-4h4"/></svg>';
+
+// 제목 옆 동기화 아이콘. 로컬 서버로 열었을 때만 나온다. 자세한 내용은 올려놓으면 보인다.
+function syncButton() {
+  if (!state.local) return null;
+  const r = state.rate;
+  const button = el('button', { type: 'button', class: `syncbtn${state.busy ? ' busy' : ''}${state.error ? ' err' : ''}`, 'aria-label': state.busy ? T.syncing : T.reload, disabled: state.busy });
+  button.innerHTML = ICON;
+  button.addEventListener('click', sync);
+  const lines = [
+    state.error || (state.busy ? `${T.syncing}…` : T.reload),
+    r ? T.quota(r.remaining.toLocaleString(), r.limit.toLocaleString(), new Date(r.resetAt).toLocaleTimeString(T.locale, { hour: '2-digit', minute: '2-digit' })) : null,
+    autoAllowed() ? T.autoOn : T.autoOff,
+  ].filter(Boolean);
+  return el('span', { class: 'syncwrap' }, button, el('span', { class: 'tip', role: 'status' }, lines.map((t) => el('div', {}, t))));
+}
+const redraw = () => { if (state.data) render(state.data); };
+
+function schedule() {
+  clearTimeout(state.timer);
+  state.timer = setTimeout(() => { if (document.visibilityState === 'visible' && autoAllowed()) sync(); else schedule(); }, AUTO_MS);
+}
+
+async function sync() {
+  if (state.busy) return;
+  state.busy = true; state.error = ''; redraw();
+  try {
+    const res = await fetch('/api/sync', { method: 'POST', headers: { 'x-dashboard': '1' } });
+    const body = await res.json();
+    if (body.rate) state.rate = body.rate;
+    if (!res.ok) throw new Error(body.error || res.status);
+    state.data = body.data;
+  } catch (e) { state.error = e.message; if (!state.data) showMissing(e.message); }
+  state.busy = false; redraw(); schedule();
+}
+
+const showMissing = (text) => put(document.getElementById('app'), el('p', {}, text));
+(async () => {
+  const status = location.protocol === 'file:' ? null : await fetch('/api/status').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  state.local = Boolean(status && status.server);
+  if (state.local) { state.rate = status.rate; if (STR[status.lang]) T = STR[status.lang]; }
+  // 파일에 데이터가 들어 있으면 그것을 쓰고, 없으면(로컬 서버) data.json 을 읽는다.
+  try { state.data = JSON.parse(document.getElementById('embedded').textContent); } catch { state.data = null; }
+  if (!state.data) state.data = await fetch('./data.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  if (state.data) { render(state.data); if (state.local) schedule(); }
+  else if (state.local) { showMissing(T.firstSync); sync(); }
+  else showMissing(T.noData);
+})();
+</script>
+</body>
+</html>

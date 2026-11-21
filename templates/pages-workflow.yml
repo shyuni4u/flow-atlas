@@ -1,0 +1,47 @@
+# 대시보드를 GitHub Pages 로 내보내는 워크플로 서식이다. 쓰려면 .github/workflows/dashboard.yml 로 복사한다 (flow-atlas init --pages 가 해 준다).
+# 먼저 저장소 Settings → Pages 에서 Source 를 "GitHub Actions" 로 바꾼다.
+# 주의: Pages 사이트는 공개된다. 비공개 저장소의 이슈 제목과 댓글을 내보내도 되는지 먼저 정한다.
+name: Dashboard
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+  issues:
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
+  pull_request:
+    types: [opened, edited, closed, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: dashboard
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node .github/flow-atlas/scripts/collect.mjs --out dashboard-out
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard-out
+      - uses: actions/deploy-pages@v4

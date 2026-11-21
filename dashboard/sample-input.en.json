@@ -1,0 +1,425 @@
+{
+ "ia": {
+  "product": "Writing app (sample)",
+  "version": "v1.0",
+  "lang": "en",
+  "areas": [
+   {
+    "id": "login",
+    "name": "Sign-up & login",
+    "flows": [
+     {
+      "id": "signup",
+      "name": "Sign up for the first time",
+      "scope": "in"
+     },
+     {
+      "id": "reset",
+      "name": "Reset a password",
+      "scope": "in"
+     }
+    ]
+   },
+   {
+    "id": "home",
+    "name": "Home",
+    "flows": [
+     {
+      "id": "list",
+      "name": "Browse my posts",
+      "scope": "in"
+     },
+     {
+      "id": "search",
+      "name": "Search",
+      "scope": "in"
+     }
+    ]
+   },
+   {
+    "id": "editor",
+    "name": "Editor",
+    "flows": [
+     {
+      "id": "write",
+      "name": "Write a new post",
+      "scope": "in"
+     },
+     {
+      "id": "photo",
+      "name": "Add a photo",
+      "scope": "in"
+     },
+     {
+      "id": "ai-draft",
+      "name": "Get an AI draft",
+      "scope": "out"
+     }
+    ]
+   },
+   {
+    "id": "settings",
+    "name": "Settings",
+    "flows": [
+     {
+      "id": "profile",
+      "name": "Edit profile",
+      "scope": "in"
+     },
+     {
+      "id": "notify",
+      "name": "Notification settings",
+      "scope": "out"
+     }
+    ]
+   },
+   {
+    "id": "release",
+    "name": "Release",
+    "flows": [
+     {
+      "id": "store",
+      "name": "Store submission",
+      "scope": "in"
+     },
+     {
+      "id": "privacy",
+      "name": "Privacy documents",
+      "scope": "in"
+     }
+    ]
+   }
+  ]
+ },
+ "issues": [
+  {
+   "number": 3,
+   "title": "Sign up with email",
+   "state": "CLOSED",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [x] Sign-up screen\n- [x] Verification email\n- [x] Error messages",
+   "url": "https://github.com/example/writing-app/issues/3",
+   "labels": [
+    {
+     "name": "flow:login/signup"
+    }
+   ],
+   "comments": [
+    {
+     "body": "### Decision needed: Ask for a nickname at sign-up?\n\n- Status: decided\n- Blocking: no\n\n**Recommended**: No\n\n**Decision**: No (2026-11-12)",
+     "url": "https://github.com/example/writing-app/issues/3#issuecomment-1"
+    }
+   ]
+  },
+  {
+   "number": 4,
+   "title": "Social login",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [x] Google login\n- [x] Kakao login\n- [ ] Sign in with Apple",
+   "url": "https://github.com/example/writing-app/issues/4",
+   "labels": [
+    {
+     "name": "flow:login/signup"
+    }
+   ],
+   "comments": [
+    {
+     "body": "### Decision needed: Should Sign in with Apple ship in 1.0?\n\n- Status: waiting\n- Blocking: yes\n\n**Recommended**: Yes — the store review requires it\n\n**Decision**: ",
+     "url": "https://github.com/example/writing-app/issues/4#issuecomment-1"
+    }
+   ]
+  },
+  {
+   "number": 9,
+   "title": "Send a reset email",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [ ] Send the email\n- [ ] New password screen",
+   "url": "https://github.com/example/writing-app/issues/9",
+   "labels": [
+    {
+     "name": "flow:login/reset"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 5,
+   "title": "My posts list",
+   "state": "CLOSED",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [x] List screen\n- [x] Empty state",
+   "url": "https://github.com/example/writing-app/issues/5",
+   "labels": [
+    {
+     "name": "flow:home/list"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 12,
+   "title": "Search titles and body",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [ ] Search box\n- [ ] Results list\n- [ ] Recent searches",
+   "url": "https://github.com/example/writing-app/issues/12",
+   "labels": [
+    {
+     "name": "flow:home/search"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 6,
+   "title": "Writing and autosave",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [x] Body input\n- [x] Autosave\n- [x] Recover drafts\n- [ ] Offline save\n- [ ] Conflict handling",
+   "url": "https://github.com/example/writing-app/issues/6",
+   "labels": [
+    {
+     "name": "flow:editor/write"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 14,
+   "title": "Attach a photo from the gallery",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [x] Pick a photo\n- [ ] Upload\n- [ ] Insert into body",
+   "url": "https://github.com/example/writing-app/issues/14",
+   "labels": [
+    {
+     "name": "flow:editor/photo"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 15,
+   "title": "Draft by conversation",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [ ] Chat screen",
+   "url": "https://github.com/example/writing-app/issues/15",
+   "labels": [
+    {
+     "name": "flow:editor/ai-draft"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 8,
+   "title": "Change name and photo",
+   "state": "CLOSED",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [x] Change name\n- [x] Change photo",
+   "url": "https://github.com/example/writing-app/issues/8",
+   "labels": [
+    {
+     "name": "flow:settings/profile"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 18,
+   "title": "Prepare review materials",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [ ] Screenshots\n- [ ] Description\n- [ ] Review account\n- [ ] Age rating",
+   "url": "https://github.com/example/writing-app/issues/18",
+   "labels": [
+    {
+     "name": "flow:release/store"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 19,
+   "title": "Privacy policy page",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n- [x] Korean document\n- [ ] English translation",
+   "url": "https://github.com/example/writing-app/issues/19",
+   "labels": [
+    {
+     "name": "flow:release/privacy"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 41,
+   "title": "Loading sometimes hangs",
+   "state": "OPEN",
+   "body": "### Flow\n\nx\n\n### Tasks\n\n",
+   "url": "https://github.com/example/writing-app/issues/41",
+   "labels": [],
+   "comments": []
+  }
+ ],
+ "prs": [
+  {
+   "number": 21,
+   "title": "Email sign-up screen and verification",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## Linked issue\n\nCloses #3\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/21",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 34,
+   "title": "Google and Kakao login",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## Linked issue\n\nCloses #4\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/34",
+   "reviewDecision": "CHANGES_REQUESTED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 22,
+   "title": "Posts list screen",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## Linked issue\n\nCloses #5\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/22",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 30,
+   "title": "Editor body input and autosave",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## Linked issue\n\nRefs #6\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/30",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 36,
+   "title": "Offline save",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## Linked issue\n\nCloses #6\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\n`<Commands you ran and their results>`",
+   "url": "https://github.com/example/writing-app/pull/36",
+   "reviewDecision": "REVIEW_REQUIRED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "FAILURE",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": [
+    {
+     "body": "### Decision needed: How should autosave conflicts be handled?\n\n- Status: waiting\n- Blocking: no\n\n**Options**\n1. Last write wins\n2. Show both versions\n\n**Recommended**: 2 — losing text is the bigger problem\n\n**Decision**: ",
+     "url": "https://github.com/example/writing-app/pull/36#issuecomment-1"
+    }
+   ]
+  },
+  {
+   "number": 38,
+   "title": "Pick a photo",
+   "state": "OPEN",
+   "isDraft": true,
+   "body": "## Linked issue\n\nRefs #14\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/38",
+   "reviewDecision": "",
+   "statusCheckRollup": [],
+   "comments": []
+  },
+  {
+   "number": 25,
+   "title": "Edit profile",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## Linked issue\n\nCloses #8\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/25",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 40,
+   "title": "Privacy policy page",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## Linked issue\n\nCloses #19\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/40",
+   "reviewDecision": "REVIEW_REQUIRED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 33,
+   "title": "Dependency updates",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## Linked issue\n\nNo issue: monthly routine update\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/33",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 37,
+   "title": "Tidy editor structure",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## Linked issue\n\n\n\n## Change type\n\n- [x] Feature\n\n## Verification\n\nTests pass; checked the screen on an emulator.",
+   "url": "https://github.com/example/writing-app/pull/37",
+   "reviewDecision": "REVIEW_REQUIRED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  }
+ ],
+ "repo": {
+  "nameWithOwner": "example/writing-app",
+  "description": "A mobile writing app that drafts posts from a conversation",
+  "url": "https://github.com/example/writing-app"
+ }
+}

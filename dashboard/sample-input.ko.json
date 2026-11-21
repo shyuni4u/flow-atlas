@@ -1,0 +1,425 @@
+{
+ "ia": {
+  "product": "글쓰기 앱 (예시)",
+  "version": "v1.0",
+  "areas": [
+   {
+    "id": "login",
+    "name": "가입·로그인",
+    "flows": [
+     {
+      "id": "signup",
+      "name": "처음 가입하기",
+      "scope": "in"
+     },
+     {
+      "id": "reset",
+      "name": "비밀번호 찾기",
+      "scope": "in"
+     }
+    ]
+   },
+   {
+    "id": "home",
+    "name": "홈",
+    "flows": [
+     {
+      "id": "list",
+      "name": "글 목록 보기",
+      "scope": "in"
+     },
+     {
+      "id": "search",
+      "name": "검색하기",
+      "scope": "in"
+     }
+    ]
+   },
+   {
+    "id": "editor",
+    "name": "편집기",
+    "flows": [
+     {
+      "id": "write",
+      "name": "새 글 쓰기",
+      "scope": "in"
+     },
+     {
+      "id": "photo",
+      "name": "사진 넣기",
+      "scope": "in"
+     },
+     {
+      "id": "ai-draft",
+      "name": "AI 초안 받기",
+      "scope": "out"
+     }
+    ]
+   },
+   {
+    "id": "settings",
+    "name": "설정",
+    "flows": [
+     {
+      "id": "profile",
+      "name": "프로필 수정",
+      "scope": "in"
+     },
+     {
+      "id": "notify",
+      "name": "알림 설정",
+      "scope": "out"
+     }
+    ]
+   },
+   {
+    "id": "release",
+    "name": "출시",
+    "flows": [
+     {
+      "id": "store",
+      "name": "스토어 제출",
+      "scope": "in"
+     },
+     {
+      "id": "privacy",
+      "name": "개인정보 문서",
+      "scope": "in"
+     }
+    ]
+   }
+  ],
+  "lang": "ko"
+ },
+ "issues": [
+  {
+   "number": 3,
+   "title": "이메일로 가입",
+   "state": "CLOSED",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [x] 가입 화면\n- [x] 인증 메일\n- [x] 오류 안내",
+   "url": "https://github.com/example/writing-app/issues/3",
+   "labels": [
+    {
+     "name": "flow:login/signup"
+    }
+   ],
+   "comments": [
+    {
+     "body": "### 결정 요청: 가입 때 닉네임을 받을까\n\n- 상태: 결정됨\n- 막힘: 아니오\n\n**권장**: 받지 않는다\n\n**결정**: 받지 않는다 (2026-11-12)",
+     "url": "https://github.com/example/writing-app/issues/3#issuecomment-1"
+    }
+   ]
+  },
+  {
+   "number": 4,
+   "title": "소셜 로그인",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [x] 구글 로그인\n- [x] 카카오 로그인\n- [ ] 애플 로그인",
+   "url": "https://github.com/example/writing-app/issues/4",
+   "labels": [
+    {
+     "name": "flow:login/signup"
+    }
+   ],
+   "comments": [
+    {
+     "body": "### 결정 요청: 애플 로그인을 1.0에 넣을까\n\n- 상태: 대기\n- 막힘: 예\n\n**권장**: 넣는다 — 스토어 심사 요건이다\n\n**결정**: ",
+     "url": "https://github.com/example/writing-app/issues/4#issuecomment-1"
+    }
+   ]
+  },
+  {
+   "number": 9,
+   "title": "재설정 메일 보내기",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [ ] 메일 발송\n- [ ] 새 비밀번호 화면",
+   "url": "https://github.com/example/writing-app/issues/9",
+   "labels": [
+    {
+     "name": "flow:login/reset"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 5,
+   "title": "내 글 목록",
+   "state": "CLOSED",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [x] 목록 화면\n- [x] 빈 상태",
+   "url": "https://github.com/example/writing-app/issues/5",
+   "labels": [
+    {
+     "name": "flow:home/list"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 12,
+   "title": "제목·본문 검색",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [ ] 검색창\n- [ ] 결과 목록\n- [ ] 최근 검색어",
+   "url": "https://github.com/example/writing-app/issues/12",
+   "labels": [
+    {
+     "name": "flow:home/search"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 6,
+   "title": "본문 작성과 자동 저장",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [x] 본문 입력\n- [x] 자동 저장\n- [x] 임시 글 복구\n- [ ] 오프라인 저장\n- [ ] 충돌 처리",
+   "url": "https://github.com/example/writing-app/issues/6",
+   "labels": [
+    {
+     "name": "flow:editor/write"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 14,
+   "title": "갤러리에서 사진 첨부",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [x] 사진 고르기\n- [ ] 업로드\n- [ ] 본문에 넣기",
+   "url": "https://github.com/example/writing-app/issues/14",
+   "labels": [
+    {
+     "name": "flow:editor/photo"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 15,
+   "title": "대화로 초안 만들기",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [ ] 대화 화면",
+   "url": "https://github.com/example/writing-app/issues/15",
+   "labels": [
+    {
+     "name": "flow:editor/ai-draft"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 8,
+   "title": "이름·사진 변경",
+   "state": "CLOSED",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [x] 이름 변경\n- [x] 사진 변경",
+   "url": "https://github.com/example/writing-app/issues/8",
+   "labels": [
+    {
+     "name": "flow:settings/profile"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 18,
+   "title": "심사 자료 준비",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [ ] 스크린샷\n- [ ] 설명문\n- [ ] 심사 계정\n- [ ] 연령 등급",
+   "url": "https://github.com/example/writing-app/issues/18",
+   "labels": [
+    {
+     "name": "flow:release/store"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 19,
+   "title": "처리방침 페이지",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n- [x] 국문 문서\n- [ ] 영문 번역",
+   "url": "https://github.com/example/writing-app/issues/19",
+   "labels": [
+    {
+     "name": "flow:release/privacy"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 41,
+   "title": "로딩이 가끔 멈춘다",
+   "state": "OPEN",
+   "body": "### 흐름\n\nx\n\n### 작업 항목\n\n",
+   "url": "https://github.com/example/writing-app/issues/41",
+   "labels": [],
+   "comments": []
+  }
+ ],
+ "prs": [
+  {
+   "number": 21,
+   "title": "이메일 가입 화면과 인증",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\nCloses #3\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/21",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 34,
+   "title": "구글·카카오 로그인",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\nCloses #4\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/34",
+   "reviewDecision": "CHANGES_REQUESTED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 22,
+   "title": "글 목록 화면",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\nCloses #5\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/22",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 30,
+   "title": "편집기 본문 입력과 자동 저장",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\nRefs #6\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/30",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 36,
+   "title": "오프라인 저장",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\nCloses #6\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n`<실행한 명령과 결과>`",
+   "url": "https://github.com/example/writing-app/pull/36",
+   "reviewDecision": "REVIEW_REQUIRED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "FAILURE",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": [
+    {
+     "body": "### 결정 요청: 자동 저장 충돌을 어떻게 처리할까\n\n- 상태: 대기\n- 막힘: 아니오\n\n**선택지**\n1. 나중 저장 우선\n2. 두 판본을 모두 보여주기\n\n**권장**: 2 — 글이 사라지는 쪽이 더 큰 문제다\n\n**결정**: ",
+     "url": "https://github.com/example/writing-app/pull/36#issuecomment-1"
+    }
+   ]
+  },
+  {
+   "number": 38,
+   "title": "사진 고르기",
+   "state": "OPEN",
+   "isDraft": true,
+   "body": "## 연결 이슈\n\nRefs #14\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/38",
+   "reviewDecision": "",
+   "statusCheckRollup": [],
+   "comments": []
+  },
+  {
+   "number": 25,
+   "title": "프로필 수정",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\nCloses #8\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/25",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 40,
+   "title": "개인정보 처리방침 페이지",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\nCloses #19\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/40",
+   "reviewDecision": "REVIEW_REQUIRED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 33,
+   "title": "의존성 업데이트",
+   "state": "MERGED",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\n이슈 없음: 월간 정기 업데이트\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/33",
+   "reviewDecision": "APPROVED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  },
+  {
+   "number": 37,
+   "title": "편집기 구조 정리",
+   "state": "OPEN",
+   "isDraft": false,
+   "body": "## 연결 이슈\n\n\n\n## 변경 유형\n\n- [x] 기능 추가\n\n## 검증\n\n테스트 통과, 에뮬레이터에서 화면 확인.",
+   "url": "https://github.com/example/writing-app/pull/37",
+   "reviewDecision": "REVIEW_REQUIRED",
+   "statusCheckRollup": [
+    {
+     "conclusion": "SUCCESS",
+     "status": "COMPLETED"
+    }
+   ],
+   "comments": []
+  }
+ ],
+ "repo": {
+  "nameWithOwner": "example/writing-app",
+  "description": "대화로 사실을 모아 글을 써 주는 모바일 글쓰기 앱",
+  "url": "https://github.com/example/writing-app"
+ }
+}
