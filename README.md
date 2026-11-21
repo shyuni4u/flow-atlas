@@ -4,7 +4,7 @@
 
 flow-atlas is a small set of GitHub conventions, checks, and a local dashboard for people building products with AI coding agents. It answers three questions that get lost between chat sessions: *what are we building, how far along is each part, and what is waiting on me?*
 
-[한국어 README](README.ko.md)
+**[Live demo](https://shyuni4u.github.io/flow-atlas/)** (sample data) · [한국어 README](README.ko.md)
 
 ![Dashboard showing areas, user flows and their progress](docs/screenshot.png)
 

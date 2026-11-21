@@ -4,7 +4,7 @@
 
 AI 코딩 에이전트와 제품을 만드는 사람을 위한 GitHub 구성 규칙, 검사, 로컬 대시보드 묶음이다. 대화가 끝나면 사라지는 세 가지를 저장소에 남긴다: 무엇을 만드는지, 각 부분이 어디까지 왔는지, 무엇이 내 답을 기다리는지.
 
-[English README](README.md)
+**[예시 화면 보기](https://shyuni4u.github.io/flow-atlas/ko/)** (예시 데이터) · [English README](README.md)
 
 ![영역과 사용자 흐름의 진행을 보여주는 대시보드](docs/screenshot.ko.png)
 
