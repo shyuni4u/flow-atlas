@@ -82,6 +82,8 @@ In an existing project nothing is rewritten. Open issues without a flow are list
 
 `"since": "2026-11-22"` is optional. Pull requests created before that date (UTC) are left out of "PRs without an issue" and "PRs with empty verification"; the dashboard states how many were left out. Their links to issues still show on the map. Without `since`, every pull request is counted.
 
+`"shipped": true` on a flow is optional. It marks a flow that was already built before flow-atlas was installed, so the map does not show finished work as "not started". The flow counts as if it had one closed issue: 100% and done with no issues, in progress again once an open issue is added. It is a statement you make in the file, not something flow-atlas checks.
+
 ### Issues and pull requests
 
 - An issue belongs to exactly one flow and lists its work as checkboxes. Progress is read from those checkboxes.
@@ -97,7 +99,7 @@ When an agent needs your call, it leaves one comment per question, starting with
 - **First view:** overall progress, the one thing to do next, counts of open questions and broken links, and a progress bar per area and flow.
 - **Hover** a flow or area for issue, PR and question counts. **Click** a flow to see its issues; click an issue to see each PR's state (review, checks, verification) and its questions.
 - **Filter** by status and **sort** with finished work at the bottom (default), plan order, or by progress.
-- **Progress** is derived, not entered: issue = checked tasks (closed = 100%), flow = average of its issues, area and total = average of in-scope flows. It shows direction, not effort.
+- **Progress** is derived, not entered: issue = checked tasks (closed = 100%), flow = average of its issues, area and total = average of in-scope flows. It shows direction, not effort. The one entered value is `shipped`, which adds one finished item to a flow.
 - `collect` embeds the data in the HTML, so the file opens without a server. `serve` adds a sync icon next to the title, shows remaining GitHub API quota on hover, and refreshes every 5 minutes while quota is above 20%. The server listens on `127.0.0.1` only.
 
 ### GitHub Pages
