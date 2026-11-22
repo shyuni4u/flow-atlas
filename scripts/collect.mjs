@@ -22,7 +22,7 @@ export function collect({ sample = false, out = 'dashboard-out' } = {}) {
     issues = gh(['issue', 'list', '--state', 'all', '--limit', '1000', '--json', 'number,title,state,body,url,labels,comments']);
     // 저장소 이름과 설명은 없어도 화면이 뜨므로, 읽지 못하면 비워 둔다.
     try { repo = gh(['repo', 'view', '--json', 'nameWithOwner,description,url']); } catch { repo = null; }
-    prs = gh(['pr', 'list', '--state', 'all', '--limit', '1000', '--json', 'number,title,state,isDraft,body,url,reviewDecision,statusCheckRollup,comments']);
+    prs = gh(['pr', 'list', '--state', 'all', '--limit', '1000', '--json', 'number,title,state,isDraft,body,url,createdAt,reviewDecision,statusCheckRollup,comments']);
   }
   const model = buildModel(ia, issues, prs, new Date().toISOString(), repo);
   if (sample) model.sample = true;

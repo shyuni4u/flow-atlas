@@ -54,7 +54,7 @@ node .github/flow-atlas/bin/cli.mjs serve           # or run a local server with
 
 To try it without a repository: `npx github:shyuni4u/flow-atlas collect --sample`, then open `dashboard-out/index.html`.
 
-In an existing project nothing is rewritten. Open issues without a flow are listed under "issues without a flow"; label the ones you intend to continue and leave the rest.
+In an existing project nothing is rewritten. Open issues without a flow are listed under "issues without a flow"; add a `flow:` label by hand to the ones you intend to continue and leave the rest. A hand-applied label stays until the issue body names a different flow. When the repository already has pull requests and `init` creates `flow-atlas.json`, it writes today's date (UTC) as `"since"`, so pull requests created before that date are not counted as broken links. If `flow-atlas.json` already exists, add `"since"` yourself.
 
 ## How it works
 
@@ -79,6 +79,8 @@ In an existing project nothing is rewritten. Open issues without a flow are list
 ```
 
 `id` values become labels (`area:login`, `flow:login/signup`), so rename with `name` and keep `id` stable. `"scope": "out"` keeps a flow on the map as "cut from this version" instead of deleting it.
+
+`"since": "2026-11-22"` is optional. Pull requests created before that date (UTC) are left out of "PRs without an issue" and "PRs with empty verification"; the dashboard states how many were left out. Their links to issues still show on the map. Without `since`, every pull request is counted.
 
 ### Issues and pull requests
 
@@ -122,12 +124,12 @@ The PR check and the decision-comment parser accept the headings and keywords of
 ## What the checks do not do
 
 - The PR check verifies that sections are filled in, not that the issue number exists or that the verification is true.
-- Issues created without the form are flagged with `needs-flow`, not blocked.
+- Issues created without the form are flagged with `needs-flow`, not blocked. A `flow:` label you add by hand replaces it.
 - Label sync never deletes labels that were removed from `flow-atlas.json`.
 
 ## Status
 
-Early release (0.1). The model and the PR check are covered by tests (`npm test`); the label workflows and the Pages workflow have seen little real-world use. Please open an issue if something breaks.
+Early release (0.1). The model, the PR check and the label choice are covered by tests (`npm test`); the label workflows and the Pages workflow have seen little real-world use. Please open an issue if something breaks.
 
 ## License
 
