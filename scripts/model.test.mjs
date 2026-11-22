@@ -79,6 +79,38 @@ test('since 는 실제로 있는 YYYY-MM-DD 날짜만 받는다', () => {
     for (const bad of ['2026-02-31', '2026-13-01', '2026-11-20T00:00:00Z', '20261120', 20261120, '']) assert.throws(() => load(bad), /since/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+test('shipped 흐름은 닫힌 이슈 하나가 있는 것처럼 센다', () => {
+  const tiny = (flows) => ({ product: 'x', areas: [{ id: 'a', name: 'A', flows }] });
+  const issue = (number, state, body, key) => ({ number, title: `i${number}`, state, body, url: '', labels: [{ name: `flow:a/${key}` }], comments: [] });
+  const m = buildModel(tiny([
+    { id: 'none', name: '이슈 없음', scope: 'in', shipped: true },
+    { id: 'open', name: '열린 이슈', scope: 'in', shipped: true },
+    { id: 'closed', name: '닫힌 이슈', scope: 'in', shipped: true },
+    { id: 'plain', name: '표시 없음', scope: 'in' },
+    { id: 'off', name: '꺼 둠', scope: 'in', shipped: false },
+    { id: 'cut', name: '범위 밖', scope: 'out', shipped: true },
+  ]), [issue(1, 'OPEN', '- [ ] 하나\n- [ ] 둘', 'open'), issue(2, 'CLOSED', '', 'closed')], [], '');
+  const f = Object.fromEntries(m.areas[0].flows.map((x) => [x.id, x]));
+  assert.deepEqual([f.none.status, f.none.progress, f.none.shipped], ['done', 1, true]);
+  assert.deepEqual([f.open.status, f.open.progress], ['doing', 0.5]);
+  assert.deepEqual([f.closed.status, f.closed.progress], ['done', 1]);
+  assert.deepEqual([f.plain.status, f.plain.progress, f.plain.shipped], ['todo', 0, false]);
+  assert.deepEqual([f.off.status, f.off.shipped], ['todo', false]);
+  assert.deepEqual([f.cut.status, f.cut.shipped], ['out', false]);
+  assert.equal(m.progress, (1 + 0.5 + 1 + 0 + 0) / 5);
+  assert.deepEqual(m.counts, { done: 2, doing: 1, todo: 2, out: 1 });
+  // 끝난 흐름에는 이슈를 만들라고 권하지 않고, 열린 이슈가 있는 흐름을 먼저 권한다.
+  assert.deepEqual([m.next.kind, m.next.where], ['start', '#1']);
+  assert.equal(buildModel(tiny([{ id: 'none', name: '이슈 없음', scope: 'in', shipped: true }]), [], [], '').next.kind, 'none');
+});
+test('shipped 는 true 또는 false 만 받는다', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'flow-atlas-'));
+  const load = (shipped) => { const f = join(dir, 'flow-atlas.json'); writeFileSync(f, JSON.stringify({ product: 'x', areas: [{ id: 'a', name: 'A', flows: [{ id: 'f', name: 'F', scope: 'in', shipped }] }] })); return loadIa(f); };
+  try {
+    for (const ok of [true, false, undefined]) assert.equal(load(ok).areas[0].flows[0].shipped, ok);
+    for (const bad of ['true', 1, null]) assert.throws(() => load(bad), /shipped/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
 test('영어 서식으로 쓴 저장소도 같은 결과가 나온다', () => {
   const en = JSON.parse(readFileSync(new URL('../dashboard/sample-input.en.json', import.meta.url), 'utf8'));
   const m = buildModel(en.ia, en.issues, en.prs, '2026-11-21T00:00:00Z', en.repo);

@@ -4,7 +4,7 @@ When they apply: creating issues and pull requests, or changing areas, user flow
 
 ## TRACK-01 · One file is the source of truth for areas and user flows.
 
-- Do: split the product into areas → user flows in `flow-atlas.json`. The issue form options and labels are generated from it; do not edit them by hand. A flow cut from this version stays in the file with `scope` set to `out`.
+- Do: split the product into areas → user flows in `flow-atlas.json`. The issue form options and labels are generated from it; do not edit them by hand. A flow cut from this version stays in the file with `scope` set to `out`. A flow that was already built before flow-atlas was installed gets `shipped` set to `true`.
 - Evidence: the generated-files check passes; cut flows are listed with a condition for revisiting them.
 
 ## TRACK-02 · An issue says what and why.

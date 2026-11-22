@@ -83,11 +83,13 @@ export function buildModel(ia, issues, prs, generatedAt, repo = null) {
   const areas = ia.areas.map((area) => {
     const flows = area.flows.map((flow) => {
       const list = issues.filter((i) => flowKeyOf(i) === `${area.id}/${flow.id}`).map(issueView).sort((a, b) => a.number - b.number);
+      // shipped: flow-atlas 를 들이기 전에 이미 만든 흐름. 닫힌 이슈 하나가 있는 것처럼 센다.
+      // 이슈가 없으면 완료 100%이고, 열린 이슈가 생기면 진행 중으로 돌아간다. 범위 밖 흐름에는 쓰지 않는다.
+      const shipped = flow.shipped === true && flow.scope === 'in';
       const status = flow.scope === 'out' ? 'out'
-        : list.length === 0 ? 'todo'
-        : list.every((i) => i.state === 'closed') ? 'done'
-        : list.some((i) => i.progress > 0 || i.prs.length > 0) ? 'doing' : 'todo';
-      return { id: flow.id, name: flow.name, scope: flow.scope, status, progress: avg(list.map((i) => i.progress)), issues: list };
+        : list.every((i) => i.state === 'closed') ? (list.length || shipped ? 'done' : 'todo')
+        : shipped || list.some((i) => i.progress > 0 || i.prs.length > 0) ? 'doing' : 'todo';
+      return { id: flow.id, name: flow.name, scope: flow.scope, shipped, status, progress: avg([...(shipped ? [1] : []), ...list.map((i) => i.progress)]), issues: list };
     });
     return { id: area.id, name: area.name, progress: avg(flows.filter((f) => f.scope === 'in').map((f) => f.progress)), flows };
   });

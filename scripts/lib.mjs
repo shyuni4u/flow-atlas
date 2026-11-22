@@ -33,6 +33,7 @@ export function loadIa(file) {
       if (!ID.test(flow.id ?? '')) bad(`흐름 id 형식 오류: ${key}`, `invalid flow id: ${key}`);
       if (!flow.name || /[()]/.test(flow.name)) bad(`흐름 name 이 비었거나 괄호를 포함한다: ${key}`, `flow name is empty or contains parentheses: ${key}`);
       if (!['in', 'out'].includes(flow.scope)) bad(`흐름 scope 는 in 또는 out 이어야 한다: ${key}`, `flow scope must be in or out: ${key}`);
+      if (flow.shipped !== undefined && typeof flow.shipped !== 'boolean') bad(`흐름 shipped 는 true 또는 false 여야 한다: ${key}`, `flow shipped must be true or false: ${key}`);
       if (flowIds.has(flow.id)) bad(`흐름 id 중복: ${key}`, `duplicate flow id: ${key}`);
       flowIds.add(flow.id);
     }
