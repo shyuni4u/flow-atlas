@@ -44,6 +44,7 @@ function decisionsOf(item, where) {
 }
 
 export function buildModel(ia, issues, prs, generatedAt, repo = null) {
+  const since = ia.since ?? '';
   const prViews = prs.map((pr) => ({
     number: pr.number,
     title: pr.title,
@@ -55,6 +56,8 @@ export function buildModel(ia, issues, prs, generatedAt, repo = null) {
     links: linksOf(pr.body),
     noIssueReason: prose(pr.body).match(NO_ISSUE)?.[1].trim() ?? '',
     decisions: decisionsOf(pr, `PR #${pr.number}`),
+    // 도입 기준일(since, UTC 날짜)보다 먼저 만든 PR. 서식이 없던 때의 PR이라 끊긴 연결로 세지 않는다.
+    beforeSince: Boolean(since && pr.createdAt && pr.createdAt.slice(0, 10) < since),
   }));
 
   const issueView = (issue) => {
@@ -92,13 +95,15 @@ export function buildModel(ia, issues, prs, generatedAt, repo = null) {
   const inScope = areas.flatMap((a) => a.flows.filter((f) => f.scope === 'in'));
   const allIssues = areas.flatMap((a) => a.flows.flatMap((f) => f.issues.map((i) => ({ ...i, flowName: f.name, scope: f.scope }))));
   const openIssues = allIssues.filter((i) => i.state === 'open' && i.scope === 'in');
-  const livePrs = prViews.filter((pr) => pr.state !== 'closed');
+  const livePrs = prViews.filter((pr) => pr.state !== 'closed' && !pr.beforeSince);
 
   const gaps = {
     issuesWithoutPr: openIssues.filter((i) => i.prs.length === 0).map(({ number, title, url }) => ({ number, title, url })),
     prsWithoutIssue: livePrs.filter((pr) => pr.links.length === 0).map(({ number, title, url, state, noIssueReason }) => ({ number, title, url, state, reason: noIssueReason })),
     prsWithoutEvidence: livePrs.filter((pr) => !pr.hasEvidence).map(({ number, title, url, state }) => ({ number, title, url, state })),
     issuesWithoutFlow: issues.filter((i) => i.state !== 'CLOSED' && !known.has(flowKeyOf(i))).map(({ number, title, url }) => ({ number, title, url })),
+    // 기준일 때문에 위 두 PR 목록에서 빠진 PR 수. 화면이 "세지 않았다"고 밝히는 데 쓴다.
+    prsBeforeSince: prViews.filter((pr) => pr.state !== 'closed' && pr.beforeSince && (pr.links.length === 0 || !pr.hasEvidence)).length,
   };
 
   const seen = new Set();
@@ -112,6 +117,7 @@ export function buildModel(ia, issues, prs, generatedAt, repo = null) {
     lang: ia.lang === 'ko' || ia.lang === 'en' ? ia.lang : 'en',
     product: ia.product,
     version: ia.version ?? '',
+    since,
     progress: avg(inScope.map((f) => f.progress)),
     counts: Object.fromEntries(['done', 'doing', 'todo', 'out'].map((s) => [s, areas.flatMap((a) => a.flows).filter((f) => f.status === s).length])),
     next: nextStep(openDecisions, openIssues, inScope),

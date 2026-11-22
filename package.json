@@ -6,7 +6,7 @@
   "bin": { "flow-atlas": "bin/cli.mjs" },
   "files": ["bin", "scripts", "dashboard", "templates", "docs", "README.md", "README.ko.md", "LICENSE"],
   "scripts": {
-    "test": "node --test scripts/check-pr.test.mjs scripts/decisions.test.mjs scripts/model.test.mjs",
+    "test": "node --test scripts/check-pr.test.mjs scripts/decisions.test.mjs scripts/label-issue.test.mjs scripts/model.test.mjs",
     "sample": "node bin/cli.mjs collect --sample"
   },
   "engines": { "node": ">=20" },

@@ -28,6 +28,13 @@ else {
   process.exit(command && command !== 'help' && command !== '--help' ? 1 : 0);
 }
 
+/** 저장소에 PR이 하나라도 있는지 gh 로 묻는다. gh 가 없거나 로그인·원격이 없으면 없다고 본다. */
+function hasPullRequests(cwd) {
+  try {
+    return JSON.parse(execFileSync('gh', ['pr', 'list', '--state', 'all', '--limit', '1', '--json', 'number'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })).length > 0;
+  } catch { return false; }
+}
+
 /** 새 프로젝트와 기존 프로젝트에 같은 명령을 쓴다. flow-atlas.json, 워크플로, 직접 쓴 PR 템플릿은 덮어쓰지 않는다. */
 function init() {
   const flagValues = new Set(rest.flatMap((a, i) => (a === '--lang' ? [rest[i + 1]] : [])));
@@ -55,13 +62,17 @@ function init() {
   const config = join(target, 'flow-atlas.json');
   if (existsSync(config)) kept.push('flow-atlas.json');
   else {
+    // 이미 PR이 있는 저장소라면 오늘(UTC)을 도입 기준일로 적는다. 그 전의 PR은 대시보드가 끊긴 연결로 세지 않는다.
+    const since = hasPullRequests(target) ? new Date().toISOString().slice(0, 10) : undefined;
     writeFileSync(config, `${JSON.stringify({
       product: basename(target),
       version: 'v0.1',
       lang,
+      since,
       areas: [{ id: 'core', name: say(lang, '핵심 기능', 'Core'), flows: [{ id: 'first', name: say(lang, '첫 사용자 흐름', 'First user flow'), scope: 'in' }] }],
     }, null, 2)}\n`);
     done.push(say(lang, 'flow-atlas.json (뼈대. 영역과 흐름을 고쳐 쓴다)', 'flow-atlas.json (starter; replace with your areas and flows)'));
+    if (since) done.push(say(lang, `flow-atlas.json 의 since: ${since} (UTC 기준 오늘. 그 전에 만든 PR은 끊긴 연결로 세지 않는다)`, `since: ${since} in flow-atlas.json (today in UTC; PRs created before it are not counted as broken links)`));
   }
 
   // 3. 워크플로. 없을 때만 넣는다.

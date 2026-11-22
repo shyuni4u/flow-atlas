@@ -3,6 +3,12 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ID = /^[a-z0-9][a-z0-9-]{0,19}$/;
+// 2026-02-31 처럼 없는 날짜는 Date 가 다음 달로 넘기므로, 되돌려 적은 값과 같은지 본다.
+const isDate = (s) => {
+  if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const d = new Date(`${s}T00:00:00Z`);
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+};
 
 /** flow-atlas.json 을 읽고 형식을 검사한다. 오류가 있으면 전부 모아 던진다. */
 export function loadIa(file) {
@@ -12,6 +18,7 @@ export function loadIa(file) {
   const bad = (ko, en) => errors.push(say(lang, ko, en));
   if (!ia.product) bad('product 가 비어 있다', 'product is empty');
   if (ia.lang !== undefined && !['ko', 'en'].includes(ia.lang)) bad('lang 은 ko 또는 en 이어야 한다', 'lang must be ko or en');
+  if (ia.since !== undefined && !isDate(ia.since)) bad('since 는 YYYY-MM-DD 날짜여야 한다', 'since must be a YYYY-MM-DD date');
   if (!Array.isArray(ia.areas) || ia.areas.length === 0) bad('areas 가 비어 있다', 'areas is empty');
   const areaIds = new Set();
   for (const area of ia.areas ?? []) {
